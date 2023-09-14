@@ -13,22 +13,40 @@ const App = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">Phonebook</Typography>
-          <Button component={Link} to="/contacts" color="inherit">
+          <Button
+            component={Link}
+            to="/goit-react-hw-08-phonebook/contacts"
+            color="inherit"
+          >
             Contacts
           </Button>
-          <Button component={Link} to="/register" color="inherit">
+          <Button
+            component={Link}
+            to="/goit-react-hw-08-phonebook/register"
+            color="inherit"
+          >
             Register
           </Button>
-          <Button component={Link} to="/login" color="inherit">
+          <Button
+            component={Link}
+            to="/goit-react-hw-08-phonebook/login"
+            color="inherit"
+          >
             Login
           </Button>
         </Toolbar>
       </AppBar>
       <Container>
         <Routes>
-          <Route path="/register" element={<Registration />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/contacts" element={<ContactList />}>
+          <Route
+            path="/goit-react-hw-08-phonebook/register"
+            element={<Registration />}
+          />
+          <Route path="/goit-react-hw-08-phonebook/login" element={<Login />} />
+          <Route
+            path="/goit-react-hw-08-phonebook/contacts"
+            element={<ContactList />}
+          >
             <Route index element={<ContactForm />} />
             <Route path=":id" element={<Filter />} />
           </Route>
