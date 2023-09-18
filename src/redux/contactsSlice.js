@@ -3,6 +3,13 @@ import axios from 'axios';
 
 const API_ENDPOINT = 'https://64d525c9b592423e4695308b.mockapi.io/contacts';
 
+export const updateFilter = createAsyncThunk(
+  'contacts/updateFilter',
+  async filter => {
+    return filter;
+  }
+);
+
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
   async () => {
@@ -36,13 +43,6 @@ export const deleteContact = createAsyncThunk(
     } catch (error) {
       throw error;
     }
-  }
-);
-
-export const updateFilter = createAsyncThunk(
-  'contacts/updateFilter',
-  async filter => {
-    return filter;
   }
 );
 

@@ -1,13 +1,7 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import contactsReducer from './contactsSlice';
 
-const store = configureStore({
-  reducer: {
-    contacts: contactsReducer,
-  },
-  middleware: getDefaultMiddleware({
-    serializableCheck: false,
-  }),
-});
+const store = createStore(contactsReducer, applyMiddleware(thunk));
 
 export default store;

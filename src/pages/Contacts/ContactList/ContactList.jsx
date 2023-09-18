@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact, fetchContacts } from '../../redux/contactsSlice';
-import ContactListItem from '../ContactListItem/ContactListItem';
-import { selectFilteredContacts } from '../../redux/contactsSelectors';
+import { deleteContact, fetchContacts } from '../../../redux/contactsSlice';
+import {
+  selectFilteredContacts,
+  selectFilter,
+} from '../../../redux/contactsSelectors';
+
+import ContactListItem from '../../../components/ContactListItem/ContactListItem';
 import styles from './ContactList.module.css';
 
 const ContactList = () => {
   const filteredContacts = useSelector(selectFilteredContacts);
+  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,6 +24,7 @@ const ContactList = () => {
 
   return (
     <div>
+      <h2>Contacts</h2>
       <ul className={styles.list}>
         {filteredContacts.map(contact => (
           <ContactListItem
@@ -28,6 +34,7 @@ const ContactList = () => {
           />
         ))}
       </ul>
+      <p>Current filter: {filter}</p>
     </div>
   );
 };

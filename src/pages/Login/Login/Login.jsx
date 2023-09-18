@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../../redux/userActions';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
@@ -12,25 +14,16 @@ const Login = () => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    const data = {
+    const userData = {
       email,
       password,
     };
 
     try {
-      const response = await axios.post(
-        'https://connections-api.herokuapp.com/users/login',
-        data
-      );
-
-      if (response.data) {
-        console.log('Логін успішний:', response.data);
-        setLoginSuccess(true);
-      } else {
-        console.error('Помилка при вході: отримана порожня відповідь');
-      }
+      await dispatch(loginUser(userData));
+      setLoginSuccess(true);
     } catch (error) {
-      console.error('Помилка при вході:', error.response.data);
+      console.error('Помилка при вході:', error);
     }
   };
 

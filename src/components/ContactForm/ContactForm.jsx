@@ -1,64 +1,44 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
-import styles from './ContactForm.module.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice'; // Імпортуємо addContact
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-
-  const contacts = useSelector(state => state.contacts.items);
+  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
 
-  const handleNameChange = event => setName(event.target.value);
-  const handlePhoneChange = event => setPhone(event.target.value);
+  const handleSubmit = e => {
+    e.preventDefault();
 
-  const handleSubmit = event => {
-    event.preventDefault();
-
-    if (name === '' || phone === '') {
-      alert('Please fill in all fields');
+    if (!name || !number) {
       return;
     }
 
-    if (contacts.some(contact => contact.name === name)) {
-      alert(`${name} is already in contacts`);
-      return;
-    }
+    dispatch(addContact({ name, number })); // Використовуємо addContact
 
-    console.log('Adding contact with name:', name);
-    console.log('Adding contact with phone:', phone);
-
-    dispatch(addContact({ name, phone }));
     setName('');
-    setPhone('');
+    setNumber('');
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <label className={styles.label}>
+    <form onSubmit={handleSubmit}>
+      <label>
         Name
         <input
           type="text"
-          name="name"
           value={name}
-          onChange={handleNameChange}
-          className={styles.input}
+          onChange={e => setName(e.target.value)}
         />
       </label>
-      <label className={styles.label}>
-        Phone
+      <label>
+        Number
         <input
           type="text"
-          name="phone"
-          value={phone}
-          onChange={handlePhoneChange}
-          className={styles.input}
+          value={number}
+          onChange={e => setNumber(e.target.value)}
         />
       </label>
-      <button type="submit" className={styles.button}>
-        Add contact
-      </button>
+      <button type="submit">Add contact</button>
     </form>
   );
 };
