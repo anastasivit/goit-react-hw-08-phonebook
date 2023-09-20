@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from '../../../redux/contactsSlice';
+import { fetchContacts } from '../../redux/contactsSlice';
 
 function ContactList() {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ function ContactList() {
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
-
+  console.log(contacts);
   return (
     <ul>
       {contacts.map(contact => (

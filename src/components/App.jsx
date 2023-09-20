@@ -1,18 +1,22 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from 'react-router-dom';
 import { Container, Typography, AppBar, Toolbar, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '../redux/authSlice';
 
-const ContactList = lazy(() =>
-  import('../pages/Contacts/ContactList/ContactList')
-);
-const ContactForm = lazy(() => import('./ContactForm/ContactForm'));
-const Filter = lazy(() => import('./Filter/Filter'));
-const Registration = lazy(() =>
-  import('../pages/Register/Registration/Registration')
-);
-const Login = lazy(() => import('../pages/Login/Login/Login'));
+const Contacts = lazy(() => import('../pages/Contacts/Contacts'));
+const Registration = lazy(() => import('../pages/Register/Registration'));
+const Login = lazy(() => import('../pages/Login/Login'));
 
 const App = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
   return (
     <Router>
       <AppBar position="static">
@@ -21,23 +25,33 @@ const App = () => {
           <Button component={Link} to="/contacts" color="inherit">
             Contacts
           </Button>
-          <Button component={Link} to="/register" color="inherit">
-            Register
-          </Button>
-          <Button component={Link} to="/login" color="inherit">
-            Login
-          </Button>
+          {!isAuthenticated ? (
+            <>
+              <Button component={Link} to="/register" color="inherit">
+                Register
+              </Button>
+              <Button component={Link} to="/login" color="inherit">
+                Login
+              </Button>
+            </>
+          ) : null}
         </Toolbar>
       </AppBar>
       <Container>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
+            <Route
+              path="/contacts"
+              element={
+                isAuthenticated ? (
+                  <Contacts />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
             <Route path="/register" element={<Registration />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/contacts" element={<ContactList />}>
-              <Route index element={<ContactForm />} />
-              <Route path=":id" element={<Filter />} />
-            </Route>
           </Routes>
         </Suspense>
       </Container>
