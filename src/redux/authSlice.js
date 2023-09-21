@@ -3,7 +3,10 @@ import { loginUser } from '../redux/userActions';
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {},
+  initialState: {
+    isAuthenticated: false,
+    userData: null,
+  },
   reducers: {},
   extraReducers: builder => {
     builder
@@ -14,5 +17,7 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {});
   },
 });
+
+export const selectIsAuthenticated = state => state.auth.isAuthenticated;
 
 export default authSlice.reducer;
