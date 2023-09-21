@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_homework_template=self.webpackChunkreact_homework_template||[]).push([[365],{365:function(t,e,n){n.r(e),n.d(e,{default:function(){return o}});n(791);var a=n(434),r=n(661),u=function(t){return t.contacts.filter},c=n(184),o=function(){var t=(0,a.v9)(u),e=(0,a.I0)();return(0,c.jsxs)("label",{children:["Find contacts by name",(0,c.jsx)("input",{type:"text",value:t,onChange:function(t){e((0,r.a8)(t.target.value))}})]})}}}]);
-//# sourceMappingURL=365.0a99fe4f.chunk.js.map
