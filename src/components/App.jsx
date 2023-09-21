@@ -10,9 +10,9 @@ import { Container, Typography, AppBar, Toolbar, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '../redux/authSlice';
 
-const Registration = lazy(() => import('../pages/Register/Registration'));
-const Login = lazy(() => import('../pages/Login/Login'));
-const Contacts = lazy(() => import('../pages/Contacts/Contacts'));
+const Registration = lazy(() => import('pages/Register/Registration'));
+const Login = lazy(() => import('pages/Login/Login'));
+const Contacts = lazy(() => import('pages/Contacts/Contacts'));
 
 const App = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
