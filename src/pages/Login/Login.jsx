@@ -1,54 +1,75 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../redux/userActions';
+import axios from 'axios';
+import { setUser } from '../../redux/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, TextField, Typography } from '@mui/material';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const handleEmailChange = event => setEmail(event.target.value);
-  const handlePasswordChange = event => setPassword(event.target.value);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const { email, password } = formData;
 
-    const userData = {
-      email,
-      password,
-    };
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
 
     try {
-      await dispatch(loginUser(userData));
-      setLoginSuccess(true);
+      const response = await axios.post('/users/login', formData);
+      console.log('Успішний логін:', response.data);
+
+      // Диспетчеризуємо дію для оновлення авторизації користувача
+      dispatch(setUser(response.data));
+
+      // Перенаправляємо користувача на сторінку "Контакти"
+      navigate('/contacts');
+
+      // Очищуємо дані форми
+      setFormData({
+        email: '',
+        password: '',
+      });
     } catch (error) {
-      console.error('Помилка при вході:', error);
+      console.error('Помилка при логіні:', error);
     }
   };
 
   return (
     <div>
-      <h2>Логін</h2>
-      {loginSuccess ? (
-        <p>Логін успішний! Ви увійшли в систему.</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Електронна пошта"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <button type="submit">Увійти</button>
-        </form>
-      )}
+      <Typography variant="h4">Login</Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          type="email"
+          name="email"
+          label="Email"
+          value={email}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          type="password"
+          name="password"
+          label="Password"
+          value={password}
+          onChange={handleChange}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Log in
+        </Button>
+      </form>
+      <Typography>
+        Don't have an account? <Link to="/register">Register</Link>
+      </Typography>
     </div>
   );
 };

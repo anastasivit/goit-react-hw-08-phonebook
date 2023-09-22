@@ -1,70 +1,85 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { setUser } from '../../redux/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button, TextField, Typography } from '@mui/material';
 
 const Registration = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleNameChange = event => setName(event.target.value);
-  const handleEmailChange = event => setEmail(event.target.value);
-  const handlePasswordChange = event => setPassword(event.target.value);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const { name, email, password } = formData;
 
-    const data = {
-      name,
-      email,
-      password,
-    };
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
 
     try {
-      const response = await axios.post(
-        'https://connections-api.herokuapp.com/users/signup',
-        data
-      );
+      const response = await axios.post('/users/signup', formData);
+      console.log('Успішна реєстрація:', response.data);
 
-      if (response.data) {
-        console.log('Реєстрація успішна:', response.data);
-        setRegistrationSuccess(true);
-      } else {
-        console.error('Помилка при реєстрації: отримана порожня відповідь');
-      }
+      // Перенаправляємо користувача на сторінку "Контакти"
+      navigate('/contacts');
+
+      // Диспетчеризуємо дію для оновлення авторизації користувача
+      dispatch(setUser(response.data));
+
+      // Очищуємо дані форми
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+      });
     } catch (error) {
-      console.error('Помилка при реєстрації:', error.response.data);
+      console.error('Помилка при реєстрації:', error);
     }
   };
 
   return (
     <div>
-      <h2>Реєстрація</h2>
-      {registrationSuccess ? (
-        <p>Реєстрація успішна! Ви зареєструвалися.</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Ім'я"
-            value={name}
-            onChange={handleNameChange}
-          />
-          <input
-            type="email"
-            placeholder="Електронна пошта"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <button type="submit">Зареєструватися</button>
-        </form>
-      )}
+      <Typography variant="h4">Registration</Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          type="text"
+          name="name"
+          label="Name"
+          value={name}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          type="email"
+          name="email"
+          label="Email"
+          value={email}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          type="password"
+          name="password"
+          label="Password"
+          value={password}
+          onChange={handleChange}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Register
+        </Button>
+      </form>
+      <Typography>
+        Already have an account? <Link to="/login">Log in</Link>
+      </Typography>
     </div>
   );
 };

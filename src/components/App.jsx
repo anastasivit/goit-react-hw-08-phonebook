@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -7,34 +7,43 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { Container, Typography, AppBar, Toolbar, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { selectIsAuthenticated } from '../redux/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectIsAuthenticated, setIsAuthenticated } from '../redux/authSlice';
 
 const Registration = lazy(() => import('pages/Register/Registration'));
 const Login = lazy(() => import('pages/Login/Login'));
 const Contacts = lazy(() => import('pages/Contacts/Contacts'));
 
 const App = () => {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      dispatch(setIsAuthenticated(true));
+    } else {
+      dispatch(setIsAuthenticated(false));
+    }
+  }, [dispatch]);
 
   return (
     <Router>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">Phonebook</Typography>
-          <Button component={Link} to="/contacts" color="inherit">
-            Contacts
+          {isAuthenticated && (
+            <Button component={Link} to="/contacts" color="inherit">
+              Contacts
+            </Button>
+          )}
+          <Button component={Link} to="/login" color="inherit">
+            Login
           </Button>
-          {!isAuthenticated ? (
-            <>
-              <Button component={Link} to="/register" color="inherit">
-                Register
-              </Button>
-              <Button component={Link} to="/login" color="inherit">
-                Login
-              </Button>
-            </>
-          ) : null}
+          <Button component={Link} to="/register" color="inherit">
+            Register
+          </Button>
         </Toolbar>
       </AppBar>
       <Container>
@@ -50,8 +59,26 @@ const App = () => {
                 )
               }
             />
-            <Route path="/register" element={<Registration />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/register"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/contacts" replace />
+                ) : (
+                  <Registration />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/contacts" replace />
+                ) : (
+                  <Login />
+                )
+              }
+            />
           </Routes>
         </Suspense>
       </Container>
