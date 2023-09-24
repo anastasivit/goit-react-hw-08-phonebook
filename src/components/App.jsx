@@ -1,8 +1,8 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
+  Route,
   Link,
   Navigate,
 } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { selectIsAuthenticated, setIsAuthenticated } from '../redux/authSlice';
 const Registration = lazy(() => import('pages/Register/Registration'));
 const Login = lazy(() => import('pages/Login/Login'));
 const Contacts = lazy(() => import('pages/Contacts/Contacts'));
-const PrivateRoute = lazy(() => import('../redux/PrivateRoute'));
+
 const App = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -49,27 +49,19 @@ const App = () => {
       <Container>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route
-              path="/contacts"
-              element={
-                isAuthenticated ? (
-                  <Contacts />
-                ) : (
-                  <>
-                    {console.log('Not authenticated, redirecting to /login')}
-                    <Navigate to="/login" replace />
-                  </>
-                )
-              }
-            />
+            {isAuthenticated ? (
+              <Route path="/contacts" element={<Contacts />} />
+            ) : (
+              <Route
+                path="/contacts"
+                element={<Navigate to="/login" replace />}
+              />
+            )}
             <Route
               path="/register"
               element={
                 isAuthenticated ? (
-                  <>
-                    {console.log('Authenticated, redirecting to /contacts')}
-                    <Navigate to="/contacts" replace />
-                  </>
+                  <Navigate to="/contacts" replace />
                 ) : (
                   <Registration />
                 )
@@ -79,17 +71,13 @@ const App = () => {
               path="/login"
               element={
                 isAuthenticated ? (
-                  <>
-                    {console.log('Authenticated, redirecting to /contacts')}
-                    <Navigate to="/contacts" replace />
-                  </>
+                  <Navigate to="/contacts" replace />
                 ) : (
                   <Login />
                 )
               }
             />
-            <Route path="/*" element={<Navigate to="/contacts" />} />{' '}
-            {/* Опціонально, для перенаправлення на /contacts за замовчуванням */}
+            <Route path="/*" element={<Navigate to="/contacts" />} />
           </Routes>
         </Suspense>
       </Container>
