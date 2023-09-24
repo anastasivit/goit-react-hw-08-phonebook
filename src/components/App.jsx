@@ -12,7 +12,7 @@ import { selectIsAuthenticated, setIsAuthenticated } from '../redux/authSlice';
 
 const Registration = lazy(() => import('pages/Register/Registration'));
 const Login = lazy(() => import('pages/Login/Login'));
-const Contacts = lazy(() => import('../pages/Contacts/Contacts'));
+const Contacts = lazy(() => import('pages/Contacts/Contacts'));
 
 const App = () => {
   const dispatch = useDispatch();
