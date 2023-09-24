@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setUser } from '../../redux/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { Button, TextField, Typography } from '@mui/material';
 
 const Registration = () => {
@@ -26,18 +27,15 @@ const Registration = () => {
 
     try {
       const response = await axios.post(
-        'https://connections-api.herokuapp.com/users/signup', // Змінено URL на сервер
+        'https://connections-api.herokuapp.com/users/signup',
         formData
       );
       console.log('Успішна реєстрація:', response.data);
 
-      // Перенаправляємо користувача на сторінку "Контакти"
-      navigate('/contacts');
+      navigate('/contacts', { replace: true });
 
-      // Диспетчеризуємо дію для оновлення авторизації користувача
       dispatch(setUser(response.data));
 
-      // Очищуємо дані форми
       setFormData({
         name: '',
         email: '',

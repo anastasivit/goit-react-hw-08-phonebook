@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
-import ContactList from 'components/ContactList/ContactList';
-import ContactForm from 'components/ContactForm/ContactForm';
-import Filter from 'components/Filter/Filter';
+import ContactList from '../../components/ContactList/ContactList';
+import ContactForm from '../../components/ContactForm/ContactForm';
+import Filter from '../../components/Filter/Filter';
 
 const Contacts = () => {
   return (
