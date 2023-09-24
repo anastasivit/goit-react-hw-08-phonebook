@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setUser } from '../../redux/authSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Оновлено імпорт
+
 import { Button, TextField, Typography } from '@mui/material';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Оновлений імпорт
 
   const [formData, setFormData] = useState({
     email: '',
@@ -24,7 +25,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/users/login', formData);
+      const response = await axios.post(
+        'https://connections-api.herokuapp.com/users/login',
+        formData
+      );
       console.log('Успішний логін:', response.data);
 
       // Диспетчеризуємо дію для оновлення авторизації користувача

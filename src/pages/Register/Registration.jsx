@@ -25,7 +25,10 @@ const Registration = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/users/signup', formData);
+      const response = await axios.post(
+        'https://connections-api.herokuapp.com/users/signup', // Змінено URL на сервер
+        formData
+      );
       console.log('Успішна реєстрація:', response.data);
 
       // Перенаправляємо користувача на сторінку "Контакти"

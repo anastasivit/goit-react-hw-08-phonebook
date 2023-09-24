@@ -13,7 +13,7 @@ import { selectIsAuthenticated, setIsAuthenticated } from '../redux/authSlice';
 const Registration = lazy(() => import('pages/Register/Registration'));
 const Login = lazy(() => import('pages/Login/Login'));
 const Contacts = lazy(() => import('pages/Contacts/Contacts'));
-
+const PrivateRoute = lazy(() => import('../redux/PrivateRoute'));
 const App = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -55,7 +55,10 @@ const App = () => {
                 isAuthenticated ? (
                   <Contacts />
                 ) : (
-                  <Navigate to="/login" replace />
+                  <>
+                    {console.log('Not authenticated, redirecting to /login')}
+                    <Navigate to="/login" replace />
+                  </>
                 )
               }
             />
@@ -63,7 +66,10 @@ const App = () => {
               path="/register"
               element={
                 isAuthenticated ? (
-                  <Navigate to="/contacts" replace />
+                  <>
+                    {console.log('Authenticated, redirecting to /contacts')}
+                    <Navigate to="/contacts" replace />
+                  </>
                 ) : (
                   <Registration />
                 )
@@ -73,12 +79,17 @@ const App = () => {
               path="/login"
               element={
                 isAuthenticated ? (
-                  <Navigate to="/contacts" replace />
+                  <>
+                    {console.log('Authenticated, redirecting to /contacts')}
+                    <Navigate to="/contacts" replace />
+                  </>
                 ) : (
                   <Login />
                 )
               }
             />
+            <Route path="/*" element={<Navigate to="/contacts" />} />{' '}
+            {/* Опціонально, для перенаправлення на /contacts за замовчуванням */}
           </Routes>
         </Suspense>
       </Container>
